@@ -42,7 +42,7 @@ export const useRoutines = create<any>((set, get) => ({
     const exMap = Object.fromEntries(exercises.map((e: any) => [e.id, e]))
     const built = routines.sort((a: any, b: any) => b.created_at.localeCompare(a.created_at)).map((r: any) => ({
       ...r,
-      days: days.filter((d: any) => d.routine_id === r.id).sort((a: any, b: any) => a.order_index - b.order_index).map((d: any) => ({
+      days: days.filter((d: any) => d.routine_id === r.id).sort((a: any, b: any) => a.day_number - b.day_number).map((d: any) => ({
         ...d,
         exercises: res.filter((re: any) => re.routine_day_id === d.id).sort((a: any, b: any) => a.order_index - b.order_index).map((re: any) => ({ ...re, exercise: exMap[re.exercise_id] }))
       }))
