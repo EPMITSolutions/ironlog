@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { dbGetAll } from '@/lib/db'
 import { fmtDuration, calcVolume, MUSCLE_LABELS, MUSCLE_COLORS } from '@/lib/utils'
+import { Share2, Home, Trophy, Flame } from 'lucide-react'
 
 function CompleteContent() {
   const params = useSearchParams()
@@ -95,8 +96,8 @@ function CompleteContent() {
       </div>
 
       <div className="space-y-2.5">
-        <button onClick={share} className="w-full bg-card border border-border rounded-2xl py-3.5 text-white font-medium text-sm">📤 Compartir</button>
-        <Link href="/tabs/home" className="block w-full bg-accent text-black font-bold py-4 rounded-2xl text-sm text-center">Ir al inicio</Link>
+        <button onClick={share} className="w-full bg-card border border-border rounded-2xl py-3.5 text-white font-medium text-sm flex items-center justify-center gap-2"<Share2 size={16} /> Compartir</button>
+        <Link href="/tabs/home" className="flex items-center justify-center gap-2 w-full bg-accent text-black font-bold py-4 rounded-2xl text-sm text-center">Ir al inicio</Link>
       </div>
     </div>
   )

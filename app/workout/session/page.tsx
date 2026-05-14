@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useRoutines, useWorkout } from '@/store'
 import { dbGetAll } from '@/lib/db'
 import { calc1RM, fmtTime, calcVolume } from '@/lib/utils'
+import { Timer, CheckCircle, SkipForward, Plus, Flag, Trash2, History, Copy } from 'lucide-react'
 
 function SessionContent() {
   const router = useRouter()
@@ -131,7 +132,7 @@ function SessionContent() {
           <div className="flex-1 h-2 bg-border rounded-full overflow-hidden">
             <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${restPct}%`, backgroundColor: urgent ? '#FF5757' : '#C8F135' }} />
           </div>
-          <button onClick={stopRest} className="text-white/30 text-sm px-2 py-1">Saltar ›</button>
+          <button onClick={stopRest} className="text-white/30 text-sm px-2 py-1"<SkipForward size={14} /> Saltar</button>
         </div>
       )}
 
@@ -279,9 +280,9 @@ function SessionContent() {
           )
         })}
 
-        <button onClick={() => setShowRPE(true)} className="w-full bg-accent text-black font-bold py-4 rounded-2xl text-sm">🏁 Terminar entrenamiento</button>
+        <button onClick={() => setShowRPE(true)} className="w-full bg-accent text-black font-bold py-4 rounded-2xl text-sm flex items-center justify-center gap-2"><Flag size={16} /> Terminar entrenamiento</button>
         <button onClick={() => { if (confirm('¿Descartar sesión? Se perderá todo el progreso.')) { discard(); router.push('/tabs/home') } }}
-          className="w-full border border-red-500/20 text-red-400/60 py-3 rounded-2xl text-sm">Descartar sesión</button>
+          className="w-full border border-red-500/20 text-red-400/60 py-3 rounded-2xl text-sm flex items-center justify-center gap-1.5"><Trash2 size={14} />  Descartar sesión</button>
         <div className="h-8" />
       </div>
 

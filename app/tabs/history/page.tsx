@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { dbGetAll } from '@/lib/db'
 import { fmtDuration, calcVolume, MUSCLE_LABELS, MUSCLE_COLORS } from '@/lib/utils'
+import { Clock, Layers, Flame, ChevronRight } from 'lucide-react'
 
 export default function History() {
   const [sessions, setSessions] = useState<any[]>([])

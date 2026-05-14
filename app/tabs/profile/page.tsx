@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useProfile } from '@/store'
 import { dbGetAll, dbPut, exportData, importData, uuid } from '@/lib/db'
 import { GOAL_LABELS } from '@/lib/utils'
+import { Download, Upload, Pencil, Check, X, Scale } from 'lucide-react'
 
 export default function Profile() {
   const { profile, update } = useProfile()
@@ -173,14 +174,14 @@ export default function Profile() {
         <div className="bg-card border border-border rounded-2xl divide-y divide-border">
           <button onClick={doExport} className="w-full flex justify-between items-center px-4 py-3.5 active:opacity-70">
             <div>
-              <p className="text-white text-sm text-left">📤 Exportar datos</p>
+              <p className="text-white text-sm text-left"<Download size={14} /> Exportar datos</p>
               <p className="text-white/20 text-xs mt-0.5">Descarga un JSON con todo tu historial</p>
             </div>
             <span className="text-white/20">›</span>
           </button>
           <label className="w-full flex justify-between items-center px-4 py-3.5 cursor-pointer active:opacity-70">
             <div>
-              <p className="text-white text-sm">📥 Importar datos</p>
+              <p className="text-white text-sm"<Upload size={14} /> Importar datos</p>
               <p className="text-white/20 text-xs mt-0.5">Restaura desde un backup anterior</p>
             </div>
             <span className="text-white/20">›</span>
