@@ -89,7 +89,7 @@ function SessionContent() {
   const totalSets = session.exercises.reduce((t: number, re: any) => t + re.target_sets, 0)
   const urgent = session.rest.active && session.rest.remaining <= 10
   const restPct = session.rest.total > 0 ? (session.rest.remaining / session.rest.total) * 100 : 0
-  const totalVolume = Object.values(session.sets).flat().filter((s: any) => s.done && !s.isWarmup).reduce((t: number, s: any) => t + (s.weight||0)*(s.reps||0), 0)
+  const totalVolume: number = Object.values(session.sets).flat().filter((s: any) => s.done && !s.isWarmup).reduce((t: number, s: any) => t + (Number(s.weight)||0)*(Number(s.reps)||0), 0 as number)
 
   return (
     <div className="flex flex-col h-screen bg-bg max-w-md mx-auto">
