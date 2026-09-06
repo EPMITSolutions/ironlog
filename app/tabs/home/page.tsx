@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useProfile, useRoutines, useWorkout } from '@/store'
 import { dbGetAll } from '@/lib/db'
 import { relDate, fmtDuration, streak, DAY_NAMES } from '@/lib/utils'
-import { Flame, Dumbbell, Trophy, Package, ChevronRight, Play, Activity } from 'lucide-react'
+import { Flame, Dumbbell, Trophy, Package, ChevronRight, Play, Activity, ClipboardList } from 'lucide-react'
 
 export default function Home() {
   const { profile } = useProfile()
