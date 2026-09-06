@@ -14,7 +14,7 @@ export default function Root() {
   }, [initialized, profile])
   return (
     <div className="flex items-center justify-center h-screen bg-bg">
-      <h1 className="font-heading text-6xl text-accent tracking-widest leading-none">IRON<br/>LOG</h1>
+      <h1 className="font-heading text-6xl text-accent tracking-widest leading-none text-center">IRON<br/>LOG</h1>
     </div>
   )
 }

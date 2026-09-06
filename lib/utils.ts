@@ -11,7 +11,7 @@ export function pctChange(cur: number, prev: number) {
   return Math.round(((cur - prev) / prev) * 1000) / 10
 }
 
-export function calcVolume(sets: {weight_kg: number, reps: number}[]) {
+export function calcVolume(sets: { weight_kg: number, reps: number }[]) {
   return sets.reduce((t, s) => t + s.weight_kg * s.reps, 0)
 }
 
@@ -20,7 +20,7 @@ export function weightFromPct(oneRM: number, pct: number) {
 }
 
 export function fmtTime(s: number) {
-  return `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`
+  return `${Math.floor(s / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`
 }
 
 export function fmtDuration(s: number) {
@@ -41,11 +41,11 @@ export function relDate(d: string) {
 
 export function streak(dates: string[]) {
   if (!dates.length) return 0
-  const sorted = Array.from(new Set(dates.map(d => d.split('T')[0]))).sort((a,b) => b.localeCompare(a))
+  const sorted = Array.from(new Set(dates.map(d => d.split('T')[0]))).sort((a, b) => b.localeCompare(a))
   let count = 0
   let cursor = new Date().toISOString().split('T')[0]
   for (const d of sorted) {
-    if (d === cursor) { count++; const dt = new Date(cursor); dt.setDate(dt.getDate()-1); cursor = dt.toISOString().split('T')[0] }
+    if (d === cursor) { count++; const dt = new Date(cursor); dt.setDate(dt.getDate() - 1); cursor = dt.toISOString().split('T')[0] }
     else if (d < cursor) break
   }
   return count
@@ -70,18 +70,18 @@ export const PERCENT_TABLE = [
 ]
 
 export const MUSCLE_LABELS: Record<string, string> = {
-  chest:'Pecho', back:'Espalda', shoulders:'Hombros', biceps:'Bíceps',
-  triceps:'Tríceps', legs:'Piernas', glutes:'Glúteos', core:'Core', other:'Otro',
+  chest: 'Pecho', back: 'Espalda', shoulders: 'Hombros', biceps: 'Bíceps',
+  triceps: 'Tríceps', legs: 'Piernas', glutes: 'Glúteos', core: 'Core', other: 'Otro',
 }
 
 export const MUSCLE_COLORS: Record<string, string> = {
-  chest:'#FF6B6B', back:'#4ECDC4', shoulders:'#FFE66D', biceps:'#A8E6CF',
-  triceps:'#DDA0DD', legs:'#98D8C8', glutes:'#F7DC6F', core:'#BB8FCE', other:'#95A5A6',
+  chest: '#FF6B6B', back: '#4ECDC4', shoulders: '#FFE66D', biceps: '#A8E6CF',
+  triceps: '#DDA0DD', legs: '#98D8C8', glutes: '#F7DC6F', core: '#BB8FCE', other: '#95A5A6',
 }
 
 export const GOAL_LABELS: Record<string, string> = {
-  strength:'💪 Fuerza', hypertrophy:'🏋️ Hipertrofia',
-  endurance:'🏃 Resistencia', weight_loss:'🔥 Perder peso', general:'⚡ General',
+  strength: '💪 Fuerza', hypertrophy: '🏋️ Hipertrofia',
+  endurance: '🏃 Resistencia', weight_loss: '🔥 Perder peso', general: '⚡ General',
 }
 
-export const DAY_NAMES = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo']
+export const DAY_NAMES = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']

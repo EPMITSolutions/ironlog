@@ -7,18 +7,17 @@ import { useEffect } from 'react'
 import { Home, ClipboardList, TrendingUp, History, User } from 'lucide-react'
 
 const TABS = [
-  { href: '/tabs/home',     label: 'Inicio',    Icon: Home },
-  { href: '/tabs/routine',  label: 'Rutina',    Icon: ClipboardList },
-  { href: '/tabs/progress', label: 'Progreso',  Icon: TrendingUp },
-  { href: '/tabs/history',  label: 'Historial', Icon: History },
-  { href: '/tabs/profile',  label: 'Perfil',    Icon: User },
+  { href: '/tabs/home', label: 'Inicio', Icon: Home },
+  { href: '/tabs/routine', label: 'Rutina', Icon: ClipboardList },
+  { href: '/tabs/progress', label: 'Progreso', Icon: TrendingUp },
+  { href: '/tabs/history', label: 'Historial', Icon: History },
+  { href: '/tabs/profile', label: 'Perfil', Icon: User },
 ]
 
 export default function TabsLayout({ children }: { children: React.ReactNode }) {
   const path = usePathname()
   const { initialized, init } = useProfile()
   useEffect(() => { if (!initialized) init() }, [])
-
   return (
     <div className="flex flex-col h-screen bg-bg max-w-md mx-auto relative">
       <main className="flex-1 overflow-y-auto no-scroll pb-20">{children}</main>

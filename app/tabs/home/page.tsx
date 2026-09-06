@@ -18,17 +18,14 @@ export default function Home() {
 
   const refresh = useCallback(async () => {
     await load()
-    const [allSessions, allPRs, exs, allSets] = await Promise.all([
-      dbGetAll('sessions'), dbGetAll('personal_records'), dbGetAll('exercises'), dbGetAll('sets'),
-    ])
+    const [allSessions, allPRs, exs, allSets] = await Promise.all([dbGetAll('sessions'), dbGetAll('personal_records'), dbGetAll('exercises'), dbGetAll('sets')])
     const exMap = Object.fromEntries(exs.map((e: any) => [e.id, e]))
     const done = allSessions.filter((s: any) => s.finished_at).sort((a: any, b: any) => b.started_at.localeCompare(a.started_at))
     const weightPRs = allPRs.filter((p: any) => p.pr_type === 'max_weight').sort((a: any, b: any) => b.achieved_at.localeCompare(a.achieved_at)).slice(0, 4).map((p: any) => ({ ...p, exercise: exMap[p.exercise_id] }))
     const totalVol = allSets.reduce((t: number, s: any) => t + (s.weight_kg || 0) * (s.reps || 0), 0)
     const last28 = done.filter((s: any) => Math.floor((Date.now() - new Date(s.started_at).getTime()) / 86400000) < 28).map((s: any) => s.started_at.split('T')[0])
-    setSessions(done.slice(0, 5))
-    setPRs(weightPRs)
-    setCalendarDays([...new Set(last28)])
+    setSessions(done.slice(0, 5)); setPRs(weightPRs)
+    setCalendarDays([...new Set(last28)] as string[])
     setStats({ total: done.length, streak: streak(done.map((s: any) => s.started_at)), prs: weightPRs.length, volume: totalVol })
   }, [])
 
@@ -39,7 +36,6 @@ export default function Home() {
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches'
   const name = profile?.full_name?.split(' ')[0] ?? 'campeón'
-
   const calendarGrid = Array.from({ length: 28 }, (_, i) => {
     const d = new Date(); d.setDate(d.getDate() - (27 - i))
     const str = d.toISOString().split('T')[0]
@@ -48,7 +44,6 @@ export default function Home() {
 
   return (
     <div className="px-5 pt-14 pb-4 space-y-6">
-      {/* Header */}
       <div className="flex justify-between items-end">
         <div>
           <p className="text-white/40 text-sm">{greeting},</p>
@@ -61,14 +56,8 @@ export default function Home() {
         )}
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-4 gap-2">
-        {[
-          { l: 'Sesiones', v: stats.total, Icon: Dumbbell },
-          { l: 'Racha', v: `${stats.streak}d`, Icon: Flame, a: true },
-          { l: 'PRs', v: stats.prs, Icon: Trophy },
-          { l: 'Volumen', v: stats.volume > 1000 ? `${Math.round(stats.volume / 1000)}t` : `${Math.round(stats.volume)}kg`, Icon: Package },
-        ].map(({ l, v, Icon, a }) => (
+        {[{ l: 'Sesiones', v: stats.total, Icon: Dumbbell }, { l: 'Racha', v: `${stats.streak}d`, Icon: Flame, a: true }, { l: 'PRs', v: stats.prs, Icon: Trophy }, { l: 'Volumen', v: stats.volume > 1000 ? `${Math.round(stats.volume / 1000)}t` : `${Math.round(stats.volume)}kg`, Icon: Package }].map(({ l, v, Icon, a }) => (
           <div key={l} className={`bg-card border rounded-2xl p-2.5 text-center ${a ? 'border-accent' : 'border-border'}`}>
             <Icon size={14} className="text-accent mx-auto mb-1" />
             <p className="font-heading text-xl text-accent leading-tight">{v}</p>
@@ -77,7 +66,6 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Calendario */}
       <div>
         <div className="flex justify-between items-center mb-2">
           <h2 className="font-heading text-xl text-white tracking-wide">Consistencia</h2>
@@ -86,21 +74,18 @@ export default function Home() {
         <div className="grid grid-cols-7 gap-1.5">
           {['L','M','X','J','V','S','D'].map(d => <p key={d} className="text-white/20 text-[10px] text-center">{d}</p>)}
           {calendarGrid.map((day, i) => (
-            <div key={i} className={`h-6 rounded-md transition-colors ${day.isToday ? 'ring-1 ring-accent' : ''} ${day.trained ? 'bg-accent' : 'bg-card border border-border/30'}`} />
+            <div key={i} className={`h-6 rounded-md ${day.isToday ? 'ring-1 ring-accent' : ''} ${day.trained ? 'bg-accent' : 'bg-card border border-border/30'}`} />
           ))}
         </div>
       </div>
 
-      {/* Hoy toca */}
       <div>
         <h2 className="font-heading text-xl text-white tracking-wide mb-3">Hoy toca</h2>
         {!active ? (
           <div className="bg-card border border-border rounded-2xl p-5 text-center space-y-2">
             <ClipboardList size={32} className="text-white/20 mx-auto" />
             <p className="text-white font-medium">Sin rutina activa</p>
-            <Link href="/tabs/routine" className="inline-flex items-center gap-1.5 mt-1 text-accent text-sm border border-accent/40 px-4 py-2 rounded-xl">
-              Crear rutina <ChevronRight size={14} />
-            </Link>
+            <Link href="/tabs/routine" className="inline-flex items-center gap-1.5 text-accent text-sm border border-accent/40 px-4 py-2 rounded-xl">Crear rutina <ChevronRight size={14} /></Link>
           </div>
         ) : !todayDay || todayDay.is_rest_day ? (
           <div className="bg-card border border-border rounded-2xl p-5">
@@ -121,20 +106,18 @@ export default function Home() {
                 <div key={re.id} className="flex items-center gap-2">
                   <div className="w-1 h-1 rounded-full bg-accent flex-shrink-0" />
                   <span className="text-white/60 text-sm flex-1 truncate">{re.exercise?.name_es}</span>
-                  <span className="text-white/20 text-xs">{re.target_sets}×{re.target_reps}</span>
+                  <span className="text-white/20 text-xs">{re.target_sets}×{re.target_reps} · {re.target_weight}kg</span>
                 </div>
               ))}
               {(todayDay.exercises?.length ?? 0) > 5 && <p className="text-white/20 text-xs pl-3">+{(todayDay.exercises?.length ?? 0) - 5} más</p>}
             </div>
-            <Link href={`/workout/session?dayId=${todayDay.id}`}
-              className="flex items-center justify-center gap-2 w-full bg-accent text-black font-bold text-sm py-3.5 rounded-xl">
+            <Link href={`/workout/session?dayId=${todayDay.id}`} className="flex items-center justify-center gap-2 w-full bg-accent text-black font-bold text-sm py-3.5 rounded-xl">
               <Play size={16} fill="black" /> Empezar entrenamiento
             </Link>
           </div>
         )}
       </div>
 
-      {/* Semana */}
       {active && (
         <div>
           <h2 className="font-heading text-xl text-white tracking-wide mb-3">Esta semana</h2>
@@ -153,20 +136,16 @@ export default function Home() {
         </div>
       )}
 
-      {/* PRs */}
       {prs.length > 0 && (
         <div>
           <div className="flex justify-between items-center mb-3">
-            <h2 className="font-heading text-xl text-white tracking-wide">Records personales</h2>
+            <h2 className="font-heading text-xl text-white tracking-wide">Records</h2>
             <Link href="/tabs/progress" className="text-accent text-xs flex items-center gap-0.5">Ver más <ChevronRight size={12} /></Link>
           </div>
           <div className="grid grid-cols-2 gap-2.5">
             {prs.map((pr: any) => (
               <div key={pr.id} className="bg-card border border-border rounded-2xl p-3">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <Trophy size={12} className="text-accent" />
-                  <p className="font-heading text-2xl text-accent leading-tight">{pr.value}kg</p>
-                </div>
+                <div className="flex items-center gap-1.5 mb-1"><Trophy size={12} className="text-accent" /><p className="font-heading text-2xl text-accent">{pr.value}kg</p></div>
                 <p className="text-white/50 text-xs truncate">{pr.exercise?.name_es}</p>
                 <p className="text-white/20 text-xs mt-0.5">{relDate(pr.achieved_at)}</p>
               </div>
@@ -175,27 +154,17 @@ export default function Home() {
         </div>
       )}
 
-      {/* Sesiones */}
       <div>
         <div className="flex justify-between items-center mb-3">
           <h2 className="font-heading text-xl text-white tracking-wide">Últimas sesiones</h2>
           <Link href="/tabs/history" className="text-accent text-xs flex items-center gap-0.5">Ver todo <ChevronRight size={12} /></Link>
         </div>
         {sessions.length === 0 ? (
-          <div className="bg-card border border-border rounded-2xl p-6 text-center">
-            <Dumbbell size={28} className="text-white/10 mx-auto mb-2" />
-            <p className="text-white/20 text-sm">Empieza tu primer entrenamiento</p>
-          </div>
+          <div className="bg-card border border-border rounded-2xl p-6 text-center"><Dumbbell size={28} className="text-white/10 mx-auto mb-2" /><p className="text-white/20 text-sm">Empieza tu primer entrenamiento</p></div>
         ) : sessions.map((s: any) => (
           <div key={s.id} className="bg-card border border-border rounded-2xl p-3.5 mb-2 flex justify-between items-center">
-            <div>
-              <p className="text-white text-sm font-medium">{s.name ?? 'Entrenamiento'}</p>
-              <p className="text-white/20 text-xs mt-0.5">{relDate(s.started_at)}</p>
-            </div>
-            <div className="text-right">
-              {s.duration_secs != null && <p className="font-heading text-lg text-accent">{fmtDuration(s.duration_secs)}</p>}
-              {s.rpe != null && <p className="text-white/20 text-xs">RPE {s.rpe}/10</p>}
-            </div>
+            <div><p className="text-white text-sm font-medium">{s.name ?? 'Entrenamiento'}</p><p className="text-white/20 text-xs mt-0.5">{relDate(s.started_at)}</p></div>
+            <div className="text-right">{s.duration_secs != null && <p className="font-heading text-lg text-accent">{fmtDuration(s.duration_secs)}</p>}{s.rpe != null && <p className="text-white/20 text-xs">RPE {s.rpe}/10</p>}</div>
           </div>
         ))}
       </div>

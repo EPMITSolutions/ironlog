@@ -1,5 +1,4 @@
 'use client'
-import { TrendingUp, BarChart2, Weight, Zap } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { dbGetAll } from '@/lib/db'
@@ -18,9 +17,7 @@ export default function Progress() {
   const [tab, setTab] = useState<Tab>('1rm')
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    dbGetAll('exercises').then(d => setExercises(d.sort((a: any, b: any) => a.name_es.localeCompare(b.name_es))))
-  }, [])
+  useEffect(() => { dbGetAll('exercises').then(d => setExercises(d.sort((a: any, b: any) => a.name_es.localeCompare(b.name_es)))) }, [])
 
   const loadData = async (ex: any) => {
     setSel(ex); setLoading(true)
@@ -56,53 +53,31 @@ export default function Progress() {
   return (
     <div className="px-5 pt-14 pb-4 space-y-5">
       <h1 className="font-heading text-4xl text-white tracking-widest">Progreso</h1>
-
       <div className="flex gap-2 overflow-x-auto no-scroll pb-1">
-        {[null, ...muscles].map(m => (
-          <button key={m ?? 'all'} onClick={() => setMFilter(m)} className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs border ${mFilter === m ? 'bg-accent text-black border-accent font-bold' : 'border-border bg-card text-white/40'}`}>
-            {m ? MUSCLE_LABELS[m] : 'Todos'}
-          </button>
-        ))}
+        {[null, ...muscles].map(m => <button key={m ?? 'all'} onClick={() => setMFilter(m)} className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs border ${mFilter === m ? 'bg-accent text-black border-accent font-bold' : 'border-border bg-card text-white/40'}`}>{m ? MUSCLE_LABELS[m] : 'Todos'}</button>)}
       </div>
-
       <div className="flex gap-2 overflow-x-auto no-scroll pb-1">
-        {filtEx.map((ex: any) => (
-          <button key={ex.id} onClick={() => loadData(ex)} className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs border ${sel?.id === ex.id ? 'border-accent bg-accent/20 text-accent font-semibold' : 'border-border bg-card text-white/40'}`}>
-            {ex.name_es}
-          </button>
-        ))}
+        {filtEx.map((ex: any) => <button key={ex.id} onClick={() => loadData(ex)} className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs border ${sel?.id === ex.id ? 'border-accent bg-accent/20 text-accent font-semibold' : 'border-border bg-card text-white/40'}`}>{ex.name_es}</button>)}
       </div>
-
       {!sel ? (
-        <div className="text-center py-12">
-          <p className="text-4xl mb-2">📊</p>
-          <p className="text-white font-medium">Selecciona un ejercicio</p>
-          <p className="text-white/30 text-sm mt-1">Para ver tu evolución</p>
-        </div>
+        <div className="text-center py-12"><p className="text-4xl mb-2">📊</p><p className="text-white font-medium">Selecciona un ejercicio</p><p className="text-white/30 text-sm mt-1">Para ver tu evolución</p></div>
       ) : loading ? <div className="text-center py-12 text-white/30">Cargando...</div> : (
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-2">
             {[{ l:'PR actual', v:`${pr}kg`, a:true }, { l:'1RM estimado', v:`${Math.round(est)}kg` }, { l:'Progreso 4sem', v:`${gain>=0?'+':''}${gain}%` }].map(({ l, v, a }) => (
               <div key={l} className={`bg-card border rounded-2xl p-3 text-center ${a ? 'border-accent' : 'border-border'}`}>
-                <p className="font-heading text-2xl text-accent leading-tight">{v}</p>
-                <p className="text-white/30 text-xs mt-1">{l}</p>
+                <p className="font-heading text-2xl text-accent leading-tight">{v}</p><p className="text-white/30 text-xs mt-1">{l}</p>
               </div>
             ))}
           </div>
-
           <div className="bg-card border border-border rounded-2xl p-4">
             <div className="flex gap-2 mb-4">
-              {(['1rm','weight','volume'] as Tab[]).map(t => (
-                <button key={t} onClick={() => setTab(t)} className={`flex-1 py-1.5 rounded-lg text-xs font-medium ${tab===t ? 'bg-accent text-black' : 'bg-surface text-white/40'}`}>
-                  {t==='1rm'?'1RM':t==='weight'?'Peso':'Volumen'}
-                </button>
-              ))}
+              {(['1rm','weight','volume'] as Tab[]).map(t => <button key={t} onClick={() => setTab(t)} className={`flex-1 py-1.5 rounded-lg text-xs font-medium ${tab===t ? 'bg-accent text-black' : 'bg-surface text-white/40'}`}>{t==='1rm'?'1RM':t==='weight'?'Peso':'Volumen'}</button>)}
             </div>
             {points.length < 2 ? <p className="text-white/20 text-xs text-center py-6">Necesitas más sesiones para ver la gráfica</p> : (
               <div className="flex gap-1 items-end h-32 overflow-x-auto no-scroll">
                 {points.map((p, i) => {
-                  const v = vals[i]
-                  const h = maxV===minV ? 60 : Math.max(10, ((v-minV)/(maxV-minV))*100)
+                  const v = vals[i]; const h = maxV===minV ? 60 : Math.max(10, ((v-minV)/(maxV-minV))*100)
                   return (
                     <div key={i} className="flex flex-col items-center gap-1 flex-shrink-0 w-10">
                       <span className="text-[8px] text-white/20">{Math.round(tab==='volume'?p.volume:v)}</span>
@@ -114,7 +89,6 @@ export default function Progress() {
               </div>
             )}
           </div>
-
           {est > 0 && (
             <div className="bg-card border border-border rounded-2xl p-4">
               <p className="text-white font-semibold text-sm mb-3">Cargas por % del 1RM</p>
